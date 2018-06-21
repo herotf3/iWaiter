@@ -13,4 +13,6 @@
     <string name="login_fail">Fail to login. There some errors</string>
     <string name="error_invalid_phone">Phone number format is invalid!</string>
     <string name="danh_muc">Categories</string>
+    <string name="RestaurantsRef">restaurants</string>
+    <string name="Menu">Menu</string>
 </resources>

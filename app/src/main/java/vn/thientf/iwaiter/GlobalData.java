@@ -35,7 +35,10 @@ public class GlobalData {
         this.currCart = currCart;
     }
 
-    private  GlobalData(){}
+    private GlobalData() {
+        currRes = currTable = null;
+        currCart = null;
+    }
 
     public static GlobalData getInstance(){
         if (instance==null)

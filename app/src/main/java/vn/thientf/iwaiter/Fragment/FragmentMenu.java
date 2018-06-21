@@ -2,15 +2,23 @@ package vn.thientf.iwaiter.Fragment;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import vn.thientf.iwaiter.GlobalData;
 import vn.thientf.iwaiter.R;
 
 /**
@@ -19,17 +27,16 @@ import vn.thientf.iwaiter.R;
 
 public class FragmentMenu  extends Fragment{
     View root;
-    private String tableId,resId;
-    FirebaseDatabase database;
+    private String resId;
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
 
     RecyclerView rclMenu;
-
+    boolean exist = false;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View root;
-        root=inflater.inflate(R.layout.fragment_menu,null);
+        root = inflater.inflate(R.layout.fragment_menu, null);
         initView();
         getData();
         setData();
@@ -37,17 +44,20 @@ public class FragmentMenu  extends Fragment{
     }
 
     private void setData() {
+        database = FirebaseDatabase.getInstance();
+        resId = "R111";
+
     }
 
     private void getData() {
-        Bundle bundle=getArguments();
-        resId=bundle.getString("resId");
-        tableId=bundle.getString("tableId");
+        resId = GlobalData.getInstance().getCurrRes();
     }
 
     private void initView() {
         rclMenu=root.findViewById(R.id.rcl_menu);
-        RecyclerView.LayoutManager layoutManager=new LinearLayoutManager(getActivity());
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
         rclMenu.setLayoutManager(layoutManager);
     }
+
+
 }

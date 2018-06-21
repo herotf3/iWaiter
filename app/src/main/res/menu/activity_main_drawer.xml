@@ -9,29 +9,29 @@
             android:icon="@drawable/ic_menu_camera"
             android:title="Scan table" />
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
+            android:id="@+id/nav_menu"
+            android:icon="@drawable/ic_restaurant_menu"
+            android:title="Menu" />
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
+            android:id="@+id/nav_orders"
+            android:icon="@drawable/ic_orders"
+            android:title="My pending orders" />
         <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:id="@+id/nav_history"
+            android:icon="@drawable/ic_history"
+            android:title="History" />
     </group>
 
     <item android:title="Account">
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Thông tin" />
+                android:id="@+id/nav_info"
+                android:icon="@drawable/ic_account_circle"
+                android:title="Info" />
             <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:id="@+id/nav_signout"
+                android:icon="@drawable/ic_signout"
+                android:title="Sign out" />
         </menu>
     </item>
 
