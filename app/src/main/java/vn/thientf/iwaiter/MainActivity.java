@@ -1,5 +1,7 @@
 package vn.thientf.iwaiter;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -16,6 +18,8 @@ import android.view.MenuItem;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import vn.thientf.iwaiter.Fragment.FragmentUser;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -85,8 +89,12 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
+        if (id == R.id.nav_scan) {
+            // Scan table qr code
+            // save ->res id, table id ->
+            /*new fm menu (id, tb id)
+            * replace (fm menu)
+            * */
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
@@ -96,7 +104,8 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
-
+            FragmentUser fragmentUser =  new FragmentUser();
+            replaceFragment(fragmentUser);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -104,13 +113,22 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    void replaceFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getFragmentManager();
+
+        fragmentManager.beginTransaction()
+                .replace(R.id.main_container,fragment)
+                .commit();
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
-        FirebaseUser currentUser=FirebaseAuth.getInstance().getCurrentUser();
-        if (currentUser==null){
-            this.startActivity(new Intent(getBaseContext(),LoginActivity.class));
-            finish();
-        }
+      //  FirebaseUser currentUser=FirebaseAuth.getInstance().getCurrentUser();
+     //   if (currentUser==null){
+     //       this.startActivity(new Intent(getBaseContext(),LoginActivity.class));
+     //       finish();
+      //  }
     }
+
 }
