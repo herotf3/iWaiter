@@ -12,4 +12,5 @@
     <string name="resend">Resend code</string>
     <string name="login_fail">Fail to login. There some errors</string>
     <string name="error_invalid_phone">Phone number format is invalid!</string>
+    <string name="danh_muc">Categories</string>
 </resources>
