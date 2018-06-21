@@ -1,0 +1,59 @@
+{
+  "project_info": {
+    "project_number": "235929744365",
+    "firebase_url": "https://iwaiter-f2a74.firebaseio.com",
+    "project_id": "iwaiter-f2a74",
+    "storage_bucket": "iwaiter-f2a74.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:235929744365:android:f43c8abd90a74b91",
+        "android_client_info": {
+          "package_name": "vn.thientf.iwaiter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "235929744365-monfs6844e04m1sjp21kt9cesai0rpng.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "vn.thientf.iwaiter",
+            "certificate_hash": "5a1c4dee4da130ff2ae8a116e597b2cb03cfa9a8"
+          }
+        },
+        {
+          "client_id": "235929744365-hsvc16bmmhfbiji3ag725gj96gs8t7gr.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "235929744365-hsvc16bmmhfbiji3ag725gj96gs8t7gr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD8rk_65yphOgu2Ut4vx1IxsdVTBtij1Cc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "235929744365-hsvc16bmmhfbiji3ag725gj96gs8t7gr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
