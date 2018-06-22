@@ -16,19 +16,19 @@ public class Food {
     }
 
     public String getName() {
-        return Name;
+        return name;
     }
 
     public void setName(String name) {
-        Name = name;
+        this.name = name;
     }
 
     public int getPrice() {
-        return Price;
+        return price;
     }
 
     public void setPrice(int price) {
-        Price = price;
+        this.price = price;
     }
 
     public String getImage() {
@@ -39,20 +39,39 @@ public class Food {
         this.image = image;
     }
 
-    public boolean isAvalable() {
-        return isAvalable;
-    }
-
-    public void setAvalable(boolean avalable) {
-        isAvalable = avalable;
-    }
-
     public Food() {
 
     }
 
-    String Name;
-    int Price;
-    String image;
-    boolean isAvalable;
+    public Food(String id, String name, int price, String image, boolean isAvalable) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.image = image;
+        this.isAvailable = isAvalable;
+    }
+
+    private String name;
+    private int price;
+    private String image;
+
+    public String getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    private String categoryId;
+
+    public boolean isAvailable() {
+        return isAvailable;
+    }
+
+    public void setAvailable(boolean available) {
+        isAvailable = available;
+    }
+
+    private boolean isAvailable;
 }
