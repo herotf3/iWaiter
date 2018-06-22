@@ -12,13 +12,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Objects;
+
 import vn.thientf.iwaiter.GlobalData;
+import vn.thientf.iwaiter.Interface.ItemClickListener;
+import vn.thientf.iwaiter.Models.Category;
+import vn.thientf.iwaiter.Models.CategoryVH;
+import vn.thientf.iwaiter.Models.Food;
+import vn.thientf.iwaiter.Models.FoodVH;
 import vn.thientf.iwaiter.R;
 
 /**
@@ -27,10 +37,14 @@ import vn.thientf.iwaiter.R;
 
 public class FragmentMenu  extends Fragment{
     View root;
-    private String resId;
+    private String resId, categoryId="all";
     FirebaseDatabase database = FirebaseDatabase.getInstance();
+    FirebaseRecyclerAdapter<Category,CategoryVH> adapterCategories;
+    FirebaseRecyclerAdapter<Food,FoodVH> adapterFoods;
+    FirebaseRecyclerOptions<Food> foodOptions;
 
-    RecyclerView rclMenu;
+    RecyclerView rclMenu,rclFood;
+
     boolean exist = false;
 
     @Nullable
@@ -43,21 +57,106 @@ public class FragmentMenu  extends Fragment{
         return root;
     }
 
-    private void setData() {
+    private void getData() {
         database = FirebaseDatabase.getInstance();
-        resId = "R111";
+        resId = "R001";
 
     }
 
-    private void getData() {
-        resId = GlobalData.getInstance().getCurrRes();
+    private void setData() {
+        //resId = GlobalData.getInstance().getCurrRes();
+        //Select * from category where category.resId=resId
+        Query query=database.getReference(getString(R.string.CategoriesRef))
+                .orderByChild("resId")
+                .equalTo(resId);
+
+        FirebaseRecyclerOptions<Category> options=
+                new FirebaseRecyclerOptions.Builder<Category>().setQuery(query,Category.class).build();
+
+        adapterCategories=new FirebaseRecyclerAdapter<Category, CategoryVH>(options) {
+            @Override
+            protected void onBindViewHolder(@NonNull CategoryVH holder, int position, @NonNull Category model) {
+                holder.bindData(model);
+                holder.setItemClickListener(new ItemClickListener() {
+                    @Override
+                    public void onClick(View view, int pos) {
+                        Category selected=adapterCategories.getItem(pos);
+                        Toast.makeText(getActivity(),"Pick now!",Toast.LENGTH_SHORT).show();
+                        showFoodInCategory(adapterCategories.getRef(pos).getKey());
+                    }
+                });
+
+            }
+
+            @NonNull
+            @Override
+            public CategoryVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View itemView=LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.category_item,parent,false);
+                return new CategoryVH(itemView);
+            }
+        };
+
+        rclMenu.setAdapter(adapterCategories);
+    }
+
+    //change the data in Food adapter
+    private void showFoodInCategory(String selectedId) {
+        Query newQuery;
+        if (selectedId.equals("all")) {
+            newQuery = database.getReference(getString(R.string.RestaurantsRef)).child(resId)
+                    .child("Menu").limitToLast(50);
+        }
+        else {
+            newQuery = database.getReference(getString(R.string.RestaurantsRef)).child(resId)
+                    .child("Menu")
+                    .orderByChild("categoryId")
+                    .equalTo(selectedId);
+        }
+        foodOptions=new FirebaseRecyclerOptions.Builder<Food>()
+                .setQuery(newQuery,Food.class).build();
+        adapterFoods=new FirebaseRecyclerAdapter<Food, FoodVH>(foodOptions) {
+            @NonNull
+            @Override
+            public FoodVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                return new FoodVH(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_a_food,parent));
+            }
+
+            @Override
+            protected void onBindViewHolder(@NonNull FoodVH holder, int position, @NonNull Food model) {
+                holder.bindData(model,getActivity());
+                holder.setItemClickListener(new ItemClickListener() {
+                    @Override
+                    public void onClick(View view, int pos) {
+
+                    }
+                });
+            }
+        };
+
+
+
+        adapterFoods.notifyDataSetChanged();
     }
 
     private void initView() {
         rclMenu=root.findViewById(R.id.rcl_menu);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false);
         rclMenu.setLayoutManager(layoutManager);
+        rclFood=root.findViewById(R.id.rcl_food);
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+//        adapterFoods.startListening();
+        adapterCategories.startListening();
+    }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+  //      adapterFoods.stopListening();
+        adapterCategories.stopListening();
+    }
 }
