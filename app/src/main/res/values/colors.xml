@@ -4,5 +4,7 @@
     <color name="second_color">#4d1583</color>
     <color name="first_orange_color">#6731e6</color>
     <color name="transparent">#00ffffff</color>
-    <color name="lighter_gray">#96cacaca</color>
+    <color name="lighter_gray">#ddf5f5f5</color>
+    <color name="red_main">#e43633</color>
+    <color name="red_overlay">#efe90000</color>
 </resources>

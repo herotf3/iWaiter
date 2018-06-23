@@ -38,6 +38,7 @@ public class FoodVH extends RecyclerView.ViewHolder implements View.OnClickListe
         tvPrice=itemView.findViewById(R.id.item_food_cost);
         imgFood=itemView.findViewById(R.id.item_food_img);
         iconStatus=itemView.findViewById(R.id.item_food_status);
+        itemView.setOnClickListener(this);
     }
 
     @Override

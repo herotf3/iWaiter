@@ -1,5 +1,6 @@
 package vn.thientf.iwaiter.Models;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -7,7 +8,17 @@ import java.util.Map;
  */
 
 public class Cart {
-    Map<String, Item> items; //<foodId,Item(Food,qty)>
+    public Map<String, Item> items; //<foodId,Item(Food,qty)>
+    private static Cart instance;
+    public static Cart getInstance(){
+        if (instance==null)
+            instance=new Cart();
+        return instance;
+    }
+
+    private Cart(){
+        items=new HashMap<String,Item>();
+    }
 
     public void addItem(Food food) {
         if (!items.containsKey(food.getId())) {
@@ -32,14 +43,9 @@ public class Cart {
         }
         return res;
     }
-}
 
-class Item {
-    Food food;
-    int qty;
-
-    public Item(Food food, int qTy) {
-        this.food = food;
-        this.qty = qTy;
+    public void clear() {
+        items.clear();
     }
 }
+

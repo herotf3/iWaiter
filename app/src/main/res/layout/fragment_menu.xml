@@ -4,16 +4,15 @@
     android:layout_width="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
-
     android:orientation="vertical"
+    android:id="@+id/layout_menu"
+    android:gravity="center"
+    android:padding="5dp"
     >
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Which would you like?"
-        android:gravity="center"/>
+
     <android.support.v7.widget.RecyclerView
+        android:background="@android:color/transparent"
         android:id="@+id/rcl_menu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -21,10 +20,12 @@
 
     </android.support.v7.widget.RecyclerView>
     <android.support.v7.widget.RecyclerView
+        android:layout_marginTop="5dp"
         android:id="@+id/rcl_food"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:listitem="@layout/item_a_food">
 
     </android.support.v7.widget.RecyclerView>
+
 </LinearLayout>

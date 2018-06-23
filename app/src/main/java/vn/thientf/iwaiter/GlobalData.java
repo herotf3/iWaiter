@@ -44,7 +44,7 @@ public class GlobalData {
 
     private GlobalData() {
         currRes = currTable = null;
-        currCart = null;
+        currCart = Cart.getInstance();
     }
 
     public static GlobalData getInstance(){

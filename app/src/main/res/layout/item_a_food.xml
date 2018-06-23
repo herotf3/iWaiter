@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/lighter_gray"
     android:orientation="vertical"
     app:cardElevation="@dimen/cardview_elvation"
+    app:cardBackgroundColor="@color/red_main"
     android:layout_margin="@dimen/cardview_magin"
     >
 
@@ -63,7 +63,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="25,000 VNĐ"
-                android:textColor="@color/first_orange_color"
+                android:textColor="@android:color/holo_red_dark"
                 android:textStyle="bold"
                 android:paddingTop="10dp"/>
             <LinearLayout

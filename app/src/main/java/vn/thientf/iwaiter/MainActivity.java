@@ -32,10 +32,14 @@ import vn.thientf.iwaiter.Fragment.FragmentUser;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private static final int REQUEST_SCAN = 1111;
+
+    NavigationView navigationView;
+
     String headerTitle;
     FirebaseAuth firebaseAuth;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     int containerViewId = R.id.main_container;
+    FloatingActionButton fabCart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +48,15 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        fabCart=findViewById(R.id.fab_cart);
+        fabCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this,ActivityCart.class));
+            }
+        });
+        fabCart.hide();
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -51,8 +64,18 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        disableNavItem(R.id.nav_menu);
+    }
+
+    private void disableNavItem(int nav_item) {
+        MenuItem menuItem=navigationView.getMenu().findItem(nav_item);
+        menuItem.setEnabled(false);
+    }
+
+    private void enableNavItem(int nav_menu) {
+        navigationView.getMenu().findItem(nav_menu).setEnabled(true);
     }
 
     @Override
@@ -106,6 +129,7 @@ public class MainActivity extends AppCompatActivity
             startActivityForResult(new Intent(getApplicationContext(),StartActivity.class),REQUEST_SCAN);
        //     checkRestaurantId(GlobalData.getInstance().getCurrRes());
         } else if (id == R.id.nav_menu) {
+            fabCart.show();
             FragmentMenu fragmentMenu = new FragmentMenu();
             replaceFragment(fragmentMenu);
             changeTitle("Menu");
@@ -114,6 +138,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_history) {
 
         } else if (id == R.id.nav_info) {
+             fabCart.hide();
              FragmentUser fragmentUser = new FragmentUser();
              replaceFragment(fragmentUser);
              changeTitle("Info");
@@ -140,11 +165,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-      //  FirebaseUser currentUser=FirebaseAuth.getInstance().getCurrentUser();
-     //   if (currentUser==null){
-     //       this.startActivity(new Intent(getBaseContext(),LoginActivity.class));
-     //       finish();
-      //  }
+        FirebaseUser currentUser=FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser==null){
+            this.startActivity(new Intent(getBaseContext(),LoginActivity.class));
+            finish();
+       }
     }
 
     void checkRestaurantId(final String resId) {
@@ -158,6 +183,8 @@ public class MainActivity extends AppCompatActivity
                     Toast.makeText(getBaseContext(), "Restaurant not exist!", Toast.LENGTH_LONG).show();
                 } else {
                     //Open Menu of this Restaurant
+                    enableNavItem(R.id.nav_menu);
+                    fabCart.show();
                     getFragmentManager().beginTransaction()
                             .replace(containerViewId, new FragmentMenu())
                             .addToBackStack("menu")
@@ -177,10 +204,27 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-    //    if (requestCode==REQUEST_SCAN && requestCode==RESULT_OK){
+        if (requestCode==REQUEST_SCAN && resultCode==RESULT_OK){
             String qrcode = data.getStringExtra("result");
+            validateQRCode(qrcode);
+
             Toast.makeText(this, qrcode,
                     Toast.LENGTH_LONG).show();
-    //    }
+        }
+    }
+
+    private void validateQRCode(String qrcode) {
+        if(qrcode.startsWith("iWaiter@")){
+            qrcode=qrcode.substring(8);
+            String[] ids=qrcode.split("#");
+            String resId=ids[0];
+            String tableId=ids[1];
+            if (!resId.isEmpty() && !tableId.isEmpty()){
+                GlobalData.getInstance().setCurrRes(resId);
+                GlobalData.getInstance().setCurrTable(tableId);
+                checkRestaurantId(resId);
+            }
+
+        }
     }
 }

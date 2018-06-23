@@ -16,4 +16,5 @@
     <dimen name="text_size_address">10dp</dimen>
     <dimen name="cardview_elvation">5dp</dimen>
     <dimen name="cardview_height">130dp</dimen>
+    <dimen name="text_food_name">18sp</dimen>
 </resources>

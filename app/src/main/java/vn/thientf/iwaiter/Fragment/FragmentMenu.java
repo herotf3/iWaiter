@@ -1,15 +1,22 @@
 package vn.thientf.iwaiter.Fragment;
 
 import android.app.Fragment;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -20,6 +27,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.Objects;
 
@@ -59,12 +67,10 @@ public class FragmentMenu  extends Fragment{
 
     private void getData() {
         database = FirebaseDatabase.getInstance();
-        resId = "R001";
-
+        resId = GlobalData.getInstance().getCurrRes();
     }
 
     private void setData() {
-        //resId = GlobalData.getInstance().getCurrRes();
         //Select * from category where category.resId=resId
         Query query=database.getReference(getString(R.string.CategoriesRef))
                 .orderByChild("resId")
@@ -121,10 +127,11 @@ public class FragmentMenu  extends Fragment{
                 @Override
                 protected void onBindViewHolder(@NonNull FoodVH holder, int position, @NonNull Food model) {
                     holder.bindData(model,getActivity());
+                    final Food food=model;
                     holder.setItemClickListener(new ItemClickListener() {
                         @Override
                         public void onClick(View view, int pos) {
-
+                            showPopUpPicker(food);
                         }
                     });
                 }
@@ -150,10 +157,11 @@ public class FragmentMenu  extends Fragment{
                 @Override
                 protected void onBindViewHolder(@NonNull FoodVH holder, int position, @NonNull Food model) {
                     holder.bindData(model,getActivity());
+                    final Food food=model;
                     holder.setItemClickListener(new ItemClickListener() {
                         @Override
                         public void onClick(View view, int pos) {
-
+                            showPopUpPicker(food);
                         }
                     });
                 }
@@ -163,6 +171,68 @@ public class FragmentMenu  extends Fragment{
             adapterFoods.notifyDataSetChanged();
 
         }
+
+    }
+
+    private void showPopUpPicker(final Food model) {
+        LayoutInflater inflater=getActivity().getLayoutInflater();
+        final View popUpView=inflater.inflate(R.layout.add_food_popup,null);
+        final PopupWindow popupWindow=new PopupWindow(popUpView, ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        //show
+        LinearLayout menuLayout=root.findViewById(R.id.layout_menu);
+        popupWindow.showAtLocation(menuLayout, Gravity.CENTER,0,0);
+        if(Build.VERSION.SDK_INT>=21){
+            popupWindow.setElevation(5.0f);
+        }
+        ImageView imgv=popUpView.findViewById(R.id.order_food_image);
+        Picasso.with(getActivity()).load(model.getImage()).into(imgv);
+        ((TextView)popUpView.findViewById(R.id.order_food_name)).setText(model.getName());
+        final TextView tvPrice=popUpView.findViewById(R.id.order_food_cost);
+        tvPrice.setText(String.valueOf(model.getPrice()));
+
+        popUpView.findViewById(R.id.btn_pick_cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupWindow.dismiss();
+
+            }
+        });
+
+        final TextView tvQty=popUpView.findViewById(R.id.order_qty);
+        //add 1 more
+        popUpView.findViewById(R.id.btn_add_food).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int qty=Integer.parseInt(tvQty.getText().toString())+1;
+                tvQty.setText(String.valueOf(qty));
+                tvPrice.setText(String.valueOf(qty*model.getPrice()));
+                //Toast.makeText(getActivity(),"click +",Toast.LENGTH_SHORT).show();
+            }
+        });
+        //sub 1
+        popUpView.findViewById(R.id.btn_sub_food).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int qty=Integer.parseInt(tvQty.getText().toString());
+                if (qty>1) {
+                    qty--;
+                    tvQty.setText(String.valueOf(qty));
+                    tvPrice.setText(String.valueOf(qty*model.getPrice()));
+                }
+
+                //Toast.makeText(getActivity(),"click -",Toast.LENGTH_SHORT).show();
+            }
+        });
+        popUpView.findViewById(R.id.btn_pick_submit).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int qty= Integer.parseInt(tvQty.getText().toString());
+                //add to global cart
+                GlobalData.getInstance().getCurrCart().addItem(model,qty);
+                popupWindow.dismiss();
+                Toast.makeText(getActivity(),"add "+String.valueOf(qty)+"x "+model.getName(),Toast.LENGTH_LONG).show();
+            }
+        });
 
     }
 
