@@ -68,6 +68,7 @@ public class FragmentMenu  extends Fragment{
     private void getData() {
         database = FirebaseDatabase.getInstance();
         resId = GlobalData.getInstance().getCurrRes();
+        //resId="R001";
     }
 
     private void setData() {
@@ -125,13 +126,13 @@ public class FragmentMenu  extends Fragment{
                 }
 
                 @Override
-                protected void onBindViewHolder(@NonNull FoodVH holder, int position, @NonNull Food model) {
+                protected void onBindViewHolder(@NonNull FoodVH holder, final int position, @NonNull Food model) {
                     holder.bindData(model,getActivity());
                     final Food food=model;
                     holder.setItemClickListener(new ItemClickListener() {
                         @Override
                         public void onClick(View view, int pos) {
-                            showPopUpPicker(food);
+                            showPopUpPicker(food,adapterFoods.getRef(position).getKey());
                         }
                     });
                 }
@@ -155,13 +156,14 @@ public class FragmentMenu  extends Fragment{
                 }
 
                 @Override
-                protected void onBindViewHolder(@NonNull FoodVH holder, int position, @NonNull Food model) {
+                protected void onBindViewHolder(@NonNull FoodVH holder, final int position, @NonNull Food model) {
                     holder.bindData(model,getActivity());
+
                     final Food food=model;
                     holder.setItemClickListener(new ItemClickListener() {
                         @Override
                         public void onClick(View view, int pos) {
-                            showPopUpPicker(food);
+                            showPopUpPicker(food,adapterFoods.getRef(position).getKey());
                         }
                     });
                 }
@@ -174,7 +176,7 @@ public class FragmentMenu  extends Fragment{
 
     }
 
-    private void showPopUpPicker(final Food model) {
+    private void showPopUpPicker(final Food model, final String id) {
         LayoutInflater inflater=getActivity().getLayoutInflater();
         final View popUpView=inflater.inflate(R.layout.add_food_popup,null);
         final PopupWindow popupWindow=new PopupWindow(popUpView, ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -228,7 +230,7 @@ public class FragmentMenu  extends Fragment{
             public void onClick(View view) {
                 int qty= Integer.parseInt(tvQty.getText().toString());
                 //add to global cart
-                GlobalData.getInstance().getCurrCart().addItem(model,qty);
+                GlobalData.getInstance().getCurrCart().addItem(id,model,qty);
                 popupWindow.dismiss();
                 Toast.makeText(getActivity(),"add "+String.valueOf(qty)+"x "+model.getName(),Toast.LENGTH_LONG).show();
             }
@@ -264,5 +266,11 @@ public class FragmentMenu  extends Fragment{
     public void onDestroy() {
         super.onDestroy();
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        resId=GlobalData.getInstance().getCurrRes();
     }
 }

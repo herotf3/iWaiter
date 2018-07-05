@@ -47,7 +47,7 @@ public class ActivityCart extends AppCompatActivity {
         //firebase
         db=FirebaseDatabase.getInstance();
         String resId=GlobalData.getInstance().getCurrRes();
-
+        resId="R001";
         requestRef=db.getReference(getString(R.string.RestaurantsRef)).child(resId).child("Requests");
 
         //Init view
@@ -83,7 +83,7 @@ public class ActivityCart extends AppCompatActivity {
                             requestRef.child(String.valueOf(System.currentTimeMillis()))
                                     .setValue(request);
 
-                            //delete cart in sql db
+                            //delete cart
                             GlobalData.getInstance().getCurrCart().clear();
                             Toast.makeText(getApplicationContext(),"Cảm ơn bạn đã đặt món <3",Toast.LENGTH_LONG).show();
                             finish();

@@ -28,11 +28,11 @@ public class Cart {
         }
     }
 
-    public void addItem(Food food, int qty) {
-        if (!items.containsKey(food.getId())) {
-            items.put(food.getId(), new Item(food, qty));
+    public void addItem(String id,Food food, int qty) {
+        if (!items.containsKey(id)) {
+            items.put(id, new Item(food, qty));
         } else {
-            items.get(food.getId()).qty += qty;
+            items.get(id).qty += qty;
         }
     }
 

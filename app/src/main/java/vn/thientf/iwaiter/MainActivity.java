@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        disableNavItem(R.id.nav_menu);
+        //disableNavItem(R.id.nav_menu);
     }
 
     private void disableNavItem(int nav_item) {

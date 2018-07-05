@@ -8,6 +8,9 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 import vn.thientf.iwaiter.Interface.ItemClickListener;
 import vn.thientf.iwaiter.R;
 
@@ -48,7 +51,9 @@ public class FoodVH extends RecyclerView.ViewHolder implements View.OnClickListe
 
     public void bindData(Food food, Context baseContext){
         tvName.setText(food.getName());
-        tvPrice.setText(String.valueOf(food.getPrice()));
+        Locale locale=new Locale("vi","VN");
+        NumberFormat fmt=NumberFormat.getCurrencyInstance(locale);
+        tvPrice.setText(fmt.format(food.getPrice()));
         if (!food.getImage().isEmpty()) {
             String url=food.getImage();
             Picasso.with(baseContext).load(food.getImage()).into(imgFood);
