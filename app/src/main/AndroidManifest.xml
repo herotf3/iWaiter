@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -23,22 +24,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
-        </activity>
+        <activity
+            android:name=".LoginActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
 
         <meta-data
             android:name="com.google.android.gms.vision.DEFENDENCIES"
             android:value="barcode" />
 
-        <activity android:name=".StartActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
-
-        </activity>
-        <activity android:name=".ActivityCart"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
-
-        </activity>
+        <activity
+            android:name=".StartActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
+        <activity
+            android:name=".ActivityCart"
+            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
+        <activity
+            android:name=".QRGenActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
     </application>
 
 </manifest>

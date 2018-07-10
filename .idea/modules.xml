@@ -3,7 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/iWaiter.iml" filepath="$PROJECT_DIR$/.idea/iWaiter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/iWaiter.iml" filepath="$PROJECT_DIR$/iWaiter.iml" />
+      <module fileurl="file://C:\Users\ChauHoangLong\Desktop\iWaiter\iWaiter\.idea\iWaiter.iml" filepath="C:\Users\ChauHoangLong\Desktop\iWaiter\iWaiter\.idea\iWaiter.iml" />
     </modules>
   </component>
 </project>

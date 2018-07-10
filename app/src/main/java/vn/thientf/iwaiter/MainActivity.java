@@ -136,6 +136,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_orders) {
 
         } else if (id == R.id.nav_history) {
+            startActivity(new Intent(getApplicationContext(),QRGenActivity.class));
 
         } else if (id == R.id.nav_info) {
              fabCart.hide();
@@ -166,10 +167,10 @@ public class MainActivity extends AppCompatActivity
     protected void onStart() {
         super.onStart();
         FirebaseUser currentUser=FirebaseAuth.getInstance().getCurrentUser();
-        if (currentUser==null){
+      /*  if (currentUser==null){
             this.startActivity(new Intent(getBaseContext(),LoginActivity.class));
             finish();
-       }
+       }*/
     }
 
     void checkRestaurantId(final String resId) {
