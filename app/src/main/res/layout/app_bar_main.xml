@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#fff"
     tools:context="vn.thientf.iwaiter.MainActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -21,15 +22,34 @@
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/content_main" />
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_cart"
+
+    <FrameLayout
+        android:id="@+id/cart_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_shopping_cart"
-        android:background="#fff"
-        />
+        android:layout_gravity="bottom|end">
+
+        <TextView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/circle_green"
+            android:text="0"
+            android:gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_gravity="end"
+            android:elevation="7dp" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_cart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            app:srcCompat="@drawable/ic_shopping_cart"
+            android:background="#fff"
+            app:backgroundTint="@color/red_main" />
+
+    </FrameLayout>
 
 
 </android.support.design.widget.CoordinatorLayout>

@@ -41,6 +41,7 @@
         <activity
             android:name=".QRGenActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
+        <activity android:name=".Welcome"></activity>
     </application>
 
 </manifest>

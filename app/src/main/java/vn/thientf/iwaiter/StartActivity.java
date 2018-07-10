@@ -2,6 +2,7 @@ package vn.thientf.iwaiter;
 
 import android.*;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -14,13 +15,21 @@ import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
+
+import vn.thientf.iwaiter.Fragment.FragmentMenu;
 
 public class StartActivity extends AppCompatActivity {
 
@@ -109,16 +118,56 @@ public class StartActivity extends AppCompatActivity {
                         public void run() {
                             //Create vibrate
                             Vibrator vibrator = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
-                            vibrator.vibrate(1000);
+                            vibrator.vibrate(500);
                             txtResult.setText(qrcodes.valueAt(0).displayValue);
                         }
                     });
+                    //show confirm Dialog
 
                     Intent returnIntent = new Intent();
                     returnIntent.putExtra("result", qrcodes.valueAt(0).displayValue);
                     setResult(Activity.RESULT_OK, returnIntent);
                     finish();
                 }
+            }
+        });
+    }
+
+    private void validateQRCode(String qrcode) {
+        if (qrcode.startsWith("iWaiter@")) {
+            qrcode = qrcode.substring(8);
+            String[] ids = qrcode.split("#");
+            String resId = ids[0];
+            String tableId = ids[1];
+            if (!resId.isEmpty() && !tableId.isEmpty()) {
+                GlobalData.getInstance().setCurrRes(resId);
+                GlobalData.getInstance().setCurrTable(tableId);
+                checkRestaurantId(resId);
+            }
+
+        }
+    }
+
+    void checkRestaurantId(final String resId) {
+        if (resId == null)
+            return;
+        DatabaseReference restaurantRef = FirebaseDatabase.getInstance()
+                .getReference(getString(R.string.RestaurantsRef));
+        restaurantRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.hasChild(resId)) {
+                    Toast.makeText(getBaseContext(), "Restaurant is not exist!", Toast.LENGTH_LONG).show();
+                } else {
+                    dataSnapshot.child(resId);
+                    Toast.makeText(getBaseContext(), "Welcome <3", Toast.LENGTH_LONG).show();
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
     }

@@ -19,6 +19,7 @@ public class CategoryVH extends RecyclerView.ViewHolder implements View.OnClickL
 
     public void setItemClickListener(ItemClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
+
     }
 
     public CategoryVH(View itemView) {

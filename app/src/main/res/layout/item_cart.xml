@@ -4,6 +4,8 @@
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/cardview_magin"
     android:elevation="@dimen/cardview_elvation"
+    android:background="#fafafa"
+    android:backgroundTint="@color/cardview_light_background"
     >
 
     <LinearLayout
@@ -24,6 +26,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Food 1"
+                android:textColor="#2e2e2e"
                 android:layout_marginLeft="10dp"
                 android:textStyle="bold"
                 android:gravity="center_vertical|start"
@@ -32,6 +35,7 @@
                 android:id="@+id/cart_itemPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="#dedede"
                 android:text="30,000vnd"
                 android:layout_marginLeft="10dp"
                 android:textStyle="italic"
@@ -43,7 +47,15 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_gravity="center_vertical|end"
-            android:layout_marginRight="18dp"
+            android:layout_marginEnd="18dp"
             android:id="@+id/cart_itemCount"/>
+
+        <ImageView
+            android:id="@+id/cart_delete"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center_vertical|end"
+            android:layout_marginEnd="10dp"
+            android:contentDescription="@string/delete" />
     </LinearLayout>
 </android.support.v7.widget.CardView>

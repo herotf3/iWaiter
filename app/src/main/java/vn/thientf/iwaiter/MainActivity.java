@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,10 +29,14 @@ import com.google.firebase.database.ValueEventListener;
 
 import vn.thientf.iwaiter.Fragment.FragmentMenu;
 import vn.thientf.iwaiter.Fragment.FragmentUser;
+import vn.thientf.iwaiter.Models.User;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private static final int REQUEST_SCAN = 1111;
+
+    DatabaseReference userRef;
+    FirebaseUser user;
 
     NavigationView navigationView;
 
@@ -40,6 +45,21 @@ public class MainActivity extends AppCompatActivity
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     int containerViewId = R.id.main_container;
     FloatingActionButton fabCart;
+    View cartView;
+    TextView tvUserName;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser == null) {
+            this.startActivity(new Intent(getBaseContext(), LoginActivity.class));
+            finish();
+        } else {
+            user = currentUser;
+        }
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +75,9 @@ public class MainActivity extends AppCompatActivity
                 startActivity(new Intent(MainActivity.this,ActivityCart.class));
             }
         });
-        fabCart.hide();
-
+        cartView = findViewById(R.id.cart_button);
+        //hide cart button
+        cartView.setVisibility(View.INVISIBLE);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -66,7 +87,15 @@ public class MainActivity extends AppCompatActivity
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        //disableNavItem(R.id.nav_menu);
+        View headerView = navigationView.getHeaderView(0);
+
+        tvUserName = headerView.findViewById(R.id.tv_userName);
+        userRef = FirebaseDatabase.getInstance().getReference("Users");
+        createGlobalUser();
+
+
+        //user can't view menu until scan a valid table QR code
+        disableNavItem(R.id.nav_menu);
     }
 
     private void disableNavItem(int nav_item) {
@@ -129,14 +158,13 @@ public class MainActivity extends AppCompatActivity
             startActivityForResult(new Intent(getApplicationContext(),StartActivity.class),REQUEST_SCAN);
        //     checkRestaurantId(GlobalData.getInstance().getCurrRes());
         } else if (id == R.id.nav_menu) {
-            fabCart.show();
+            cartView.setVisibility(View.VISIBLE);
             FragmentMenu fragmentMenu = new FragmentMenu();
             replaceFragment(fragmentMenu);
             changeTitle("Menu");
         } else if (id == R.id.nav_orders) {
 
         } else if (id == R.id.nav_history) {
-            startActivity(new Intent(getApplicationContext(),QRGenActivity.class));
 
         } else if (id == R.id.nav_info) {
              fabCart.hide();
@@ -161,16 +189,6 @@ public class MainActivity extends AppCompatActivity
         fragmentManager.beginTransaction()
                 .replace(R.id.main_container,fragment)
                 .commit();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        FirebaseUser currentUser=FirebaseAuth.getInstance().getCurrentUser();
-      /*  if (currentUser==null){
-            this.startActivity(new Intent(getBaseContext(),LoginActivity.class));
-            finish();
-       }*/
     }
 
     void checkRestaurantId(final String resId) {
@@ -227,5 +245,30 @@ public class MainActivity extends AppCompatActivity
             }
 
         }
+    }
+
+    private void createGlobalUser() {
+        //find user in DB
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null)
+            return;
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.hasChild(user.getUid())) {
+                    //if not exist, create new user
+                    userRef.child(user.getUid()).setValue(new User(user));
+                }
+                User myUser = dataSnapshot.child(user.getUid()).getValue(User.class);
+                GlobalData.getInstance().setCurrUser(myUser);
+                tvUserName.setText(GlobalData.getInstance().getCurrUser().getPhone());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 }

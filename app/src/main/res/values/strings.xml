@@ -21,6 +21,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="result_text_default">scan qr code</string>
     <string name="your_cart">Your cart</string>
+    <string name="scan_qrcode_table">Scan QR code on the table</string>
+    <string name="delete">delete</string>
     <string name="generate">GENERATE</string>
     <string name="qr_code_generator">QR Code Generator</string>
     <string name="enter_text_to_generate">Enter Text to generate</string>

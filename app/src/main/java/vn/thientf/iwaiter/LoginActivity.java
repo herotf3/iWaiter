@@ -25,10 +25,16 @@ import com.google.firebase.auth.FirebaseAuthProvider;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.concurrent.TimeUnit;
 
 import vn.thientf.iwaiter.Handler.HideSKeyOnFocusChange;
+import vn.thientf.iwaiter.Models.User;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG ="111" ;
@@ -158,6 +164,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Toast.makeText(getApplicationContext(),"Sign in success",Toast.LENGTH_LONG).show();
+
                             startActivity(new Intent(LoginActivity.this,MainActivity.class));
                             finish();
                             // ...

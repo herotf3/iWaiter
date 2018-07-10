@@ -36,6 +36,13 @@ public class Cart {
         }
     }
 
+    public void deleteItem(String id) {
+        if (items.containsKey(id)) {
+            //delete
+            items.remove(id);
+        }
+    }
+
     public int getSubTotal() {
         int res = 0;
         for (Map.Entry<String, Item> entry : items.entrySet()) {

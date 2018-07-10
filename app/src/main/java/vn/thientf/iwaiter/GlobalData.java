@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import vn.thientf.iwaiter.Models.Cart;
+import vn.thientf.iwaiter.Models.User;
 
 /**
  * Created by ASUS on 21/06/2018.
@@ -17,6 +18,11 @@ public class GlobalData {
     private static GlobalData instance;
     private String currTable, currRes;
     private Cart currCart;
+    private User currUser;
+
+    public User getCurrUser() {
+        return currUser;
+    }
 
     public String getCurrTable() {
         return currTable;
@@ -51,6 +57,10 @@ public class GlobalData {
         if (instance==null)
             instance=new GlobalData();
         return instance;
+    }
+
+    public void setCurrUser(User currUser) {
+        this.currUser = currUser;
     }
 
     /**

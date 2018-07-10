@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -21,13 +22,15 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import vn.thientf.iwaiter.Adapter.CartAdapter;
+import vn.thientf.iwaiter.Interface.DeleteCartItem;
 import vn.thientf.iwaiter.Models.Cart;
 import vn.thientf.iwaiter.Models.Item;
 import vn.thientf.iwaiter.Models.Request;
 
-public class ActivityCart extends AppCompatActivity {
+public class ActivityCart extends AppCompatActivity implements DeleteCartItem {
 
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
@@ -39,6 +42,10 @@ public class ActivityCart extends AppCompatActivity {
 
     Cart orders;
     CartAdapter adapter;
+    List<Item> listItemCart;
+
+    Locale locale;
+    NumberFormat fmt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +85,9 @@ public class ActivityCart extends AppCompatActivity {
                     builder.setPositiveButton("Xong", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            Request request=new Request(tableId, orders);
+                            String userId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
+                            String desciption = edtAddress.getText().toString();
+                            Request request = new Request(userId, tableId, orders, desciption);
                             //add to firebase
                             requestRef.child(String.valueOf(System.currentTimeMillis()))
                                     .setValue(request);
@@ -107,22 +116,31 @@ public class ActivityCart extends AppCompatActivity {
 
     private void loadListRequest() {
         orders =GlobalData.getInstance().getCurrCart();
-        List<Item> list = new ArrayList<Item>(orders.items.values());
-        adapter=new CartAdapter(list,this);
+        listItemCart = new ArrayList<Item>(orders.items.values());
+        adapter = new CartAdapter(listItemCart, this, this);
         recyclerView.setAdapter(adapter);
 
         //tinh tong tien
         int total=orders.getSubTotal();
 
         //format currency
-        Locale locale=new Locale("vi","VN");
-        NumberFormat fmt=NumberFormat.getCurrencyInstance(locale);
+        locale = new Locale("vi", "VN");
+        fmt = NumberFormat.getCurrencyInstance(locale);
         tvTotal.setText(fmt.format(total));
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+    }
+
+    @Override
+    public void deleteItem(int pos) {
+        Item removeItem = listItemCart.get(pos);
+        orders.items.values().remove(removeItem);
+        listItemCart.remove(pos);
+        adapter.notifyDataSetChanged();
+        tvTotal.setText(fmt.format(orders.getSubTotal()));
     }
 }
 
